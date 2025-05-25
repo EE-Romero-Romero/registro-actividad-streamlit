@@ -9,7 +9,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 sheet_id = "1S8t3jDiwews5mjjwt1eyt5aDCEQaJjMnHh54feZWic0"
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+import json
+json_key = st.secrets["GOOGLE_SERVICE_ACCOUNT_JSON"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(json_key), scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(sheet_id).sheet1  # Asume que es la primera hoja
 
