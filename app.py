@@ -49,5 +49,20 @@ try:
     ax.set_title("Total de calorías por día")
     st.pyplot(fig)
 
+    # === Bloque para eliminar registros ===
+    st.subheader("🧹 Eliminar una entrada registrada")
+
+    if not historial.empty:
+        opciones = [f"{i}. {row['Fecha']} — {row['Actividad']} — {row['Duración (min)']} min"
+                    for i, row in historial.iterrows()]
+        seleccion = st.selectbox("Selecciona una fila para eliminar:", options=opciones)
+        if st.button("Eliminar selección"):
+            index = int(seleccion.split(".")[0])
+            historial = historial.drop(index).reset_index(drop=True)
+            historial.to_csv("registro_calorias.csv", index=False)
+            st.success("✅ Entrada eliminada correctamente.")
+            st.experimental_rerun()
+
 except FileNotFoundError:
     st.info("No hay actividades registradas todavía.")
+
